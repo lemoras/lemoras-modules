@@ -1,0 +1,18 @@
+packages:
+  - name: internal
+    environment:
+        jwt_issuer : ${jwt_issuer}
+        root_account : ${root_account}
+        token_secret_key : ${token_secret_key}
+        token_root_secret_key : ${token_root_secret_key}
+        database_url : ${database_url}
+        SPACES_KEY: ${SPACES_KEY}
+        SPACES_SECRET: ${SPACES_SECRET}
+        SPACES_ENDPOINT: "${SPACES_ENDPOINT}"
+        SPACES_NAME: "${SPACES_NAME}"
+        VALID_API_URL: "${VALID_API_URL}"
+    functions:
+      - name: note
+        limits:
+          timeout: 3000
+          memory: 128
