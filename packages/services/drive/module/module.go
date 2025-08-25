@@ -2,7 +2,9 @@ package drive
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -105,6 +107,44 @@ func Invoke(in Request) (*u.Response, error) {
 			req.ItemURL = in.ItemURL
 
 			resp = req.Create() //Create
+
+			clientTicket := &http.Client{}
+
+			jsonDataTicket, err := json.Marshal(resp["drive"])
+			if err != nil {
+				return u.Respond(u.Message(false, fmt.Sprintf("Error marshalling JSON:", err)))
+			}
+
+			reqTciket, _ := http.NewRequest("POST", os.Getenv("TICKET_API_URL"), bytes.NewBuffer(jsonDataTicket))
+			reqTciket.Header.Add("Content-Type", "application/json")
+			reqTciket.Header.Add("Authorization", in.Http.CustomHeader.Authorization)
+
+			resTicket, err := clientTicket.Do(reqTciket)
+
+			if err != nil {
+				fmt.Printf("error making http request: %s\n", err)
+				_, errRes := u.ResMessage(false, "0x11130:Missing auth token")
+				return &errRes, nil
+			}
+
+			defer resTicket.Body.Close()
+
+			// 3. Check the HTTP status code.
+			if resTicket.StatusCode != http.StatusOK {
+				return u.Respond(u.Message(false, fmt.Sprintf("API returned a non-OK status: %d\n", resTicket.StatusCode)))
+			}
+
+			// 4. Read the response body.
+			body, err := io.ReadAll(resTicket.Body)
+			if err != nil {
+				return u.Respond(u.Message(false, fmt.Sprintln("Error reading response body:", err)))
+			}
+			var jsonModel map[string]interface{}
+			// 5. Print the body.
+			json.Unmarshal(body, jsonModel)
+
+			resp["ticketToken"] = jsonModel["ticket"]
+
 			break
 		case "PUT":
 			// resp = SetCategoryByNotId(in.BucketItemId, in.Category, context.UserId, context.AppId, context.MerchantId, context.RoleId)
