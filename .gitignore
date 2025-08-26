@@ -58,3 +58,4 @@ packages/services/note/.env
 packages/services/drive/.env
 packages/system/init/.env
 app/main
+.deployed/versions.json
