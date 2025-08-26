@@ -79,7 +79,7 @@ func GetBucketsWithItems(
 
 	if !initCompleted {
 		var existingBucketCount int64
-		err2 := d.GetDB().Table("internal.buckets").
+		err2 := d.GetDB().Table("services.buckets").
 			Where("user_id = ? AND merchant_id = ? AND app_id = ? AND role_id = ?", userId, merchantId, appId, roleId).
 			Count(&existingBucketCount).Error
 
@@ -129,8 +129,8 @@ func GetBucketsWithItems(
 	        bi.parent_id,
 	        bi.item_url,
 	        1 AS depth
-	    FROM internal.bucket_items bi
-	    JOIN internal.buckets b ON bi.bucket_id = b.bucket_id
+	    FROM services.bucket_items bi
+	    JOIN services.buckets b ON bi.bucket_id = b.bucket_id
 	    WHERE b.user_id = ?
 	      AND b.merchant_id = ?
 	      AND b.app_id = ?
@@ -155,7 +155,7 @@ func GetBucketsWithItems(
 	        bi.parent_id,
 	        bi.item_url,
 	        bc.depth + 1 AS depth
-	    FROM internal.bucket_items bi
+	    FROM services.bucket_items bi
 	    INNER JOIN BucketContent bc ON bi.parent_id = bc.bucket_item_id
 	    WHERE bc.depth < ?
 	      AND (
@@ -175,7 +175,7 @@ func GetBucketsWithItems(
 	    bc.parent_id,
 	    bc.depth
 	FROM BucketContent bc
-	JOIN internal.buckets b ON bc.bucket_id = b.bucket_id
+	JOIN services.buckets b ON bc.bucket_id = b.bucket_id
 	ORDER BY bc.bucket_id, bc.parent_id ASC NULLS FIRST, bc.item_type DESC, bc.item_name ASC;
 	`
 
@@ -348,8 +348,8 @@ func SoftDeleteBucketItemRecursive(
 	var bucketId uuid.UUID
 	checkQuery := `
 		SELECT b.bucket_id
-		FROM internal.bucket_items bi
-		JOIN internal.buckets b ON bi.bucket_id = b.bucket_id
+		FROM services.bucket_items bi
+		JOIN services.buckets b ON bi.bucket_id = b.bucket_id
 		WHERE bi.bucket_item_id = ?
 		  AND b.user_id = ?
 		  AND b.merchant_id = ?
@@ -371,13 +371,13 @@ func SoftDeleteBucketItemRecursive(
 	recursiveQuery := `
 	WITH RECURSIVE ItemsToDelete AS (
 		SELECT bucket_item_id
-		FROM internal.bucket_items
+		FROM services.bucket_items
 		WHERE bucket_item_id = ?
 
 		UNION ALL
 
 		SELECT bi.bucket_item_id
-		FROM internal.bucket_items bi
+		FROM services.bucket_items bi
 		INNER JOIN ItemsToDelete itd ON bi.parent_id = itd.bucket_item_id
 	)
 	SELECT bucket_item_id FROM ItemsToDelete;
@@ -421,8 +421,8 @@ func HardDeleteBucketItemRecursive(
 	var bucketId uuid.UUID
 	checkQuery := `
 		SELECT b.bucket_id
-		FROM internal.bucket_items bi
-		JOIN internal.buckets b ON bi.bucket_id = b.bucket_id
+		FROM services.bucket_items bi
+		JOIN services.buckets b ON bi.bucket_id = b.bucket_id
 		WHERE bi.bucket_item_id = ?
 		  AND b.user_id = ?
 		  AND b.merchant_id = ?
@@ -443,13 +443,13 @@ func HardDeleteBucketItemRecursive(
 	recursiveQuery := `
 	WITH RECURSIVE ItemsToDelete AS (
 		SELECT bucket_item_id
-		FROM internal.bucket_items
+		FROM services.bucket_items
 		WHERE bucket_item_id = ?
 
 		UNION ALL
 
 		SELECT bi.bucket_item_id
-		FROM internal.bucket_items bi
+		FROM services.bucket_items bi
 		INNER JOIN ItemsToDelete itd ON bi.parent_id = itd.bucket_item_id
 	)
 	SELECT bucket_item_id FROM ItemsToDelete;
@@ -486,7 +486,7 @@ func HardDeleteBucketItemRecursive(
 // ) ([]Response, map[string]interface{}, bool) {
 
 // 	var bucketsCount int64
-// 	err := d.GetDB().Table("internal.buckets").
+// 	err := d.GetDB().Table("services.buckets").
 // 		Where("user_id = ? AND merchant_id = ? AND app_id = ? AND role_id = ?", userId, merchantId, appId, roleId).
 // 		Count(&bucketsCount).Error
 // 	if err != nil {

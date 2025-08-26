@@ -7,13 +7,14 @@ packages:
         SPACES_ENDPOINT: "${SPACES_ENDPOINT}"
         SPACES_NAME: "${SPACES_NAME}"
         VALID_API_URL: "${VALID_API_URL}"
-        TICKET_API_URL: "${TICKET_API_URL}"
     functions:
       - name: note
+        runtime: go:1.20
         limits:
           timeout: 3000
           memory: 128
       - name: drive
+        runtime: go:1.20
         limits:
           timeout: 3000
           memory: 128
@@ -23,6 +24,7 @@ packages:
         database_url : ${database_url}
     functions:
       - name: init
+        runtime: go:1.20
         limits:
           timeout: 3000
           memory: 128
