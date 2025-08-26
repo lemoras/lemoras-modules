@@ -78,7 +78,7 @@ func Invoke(in Request) (*u.Response, error) {
 var MigrationModels = func() {
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return "application." + defaultTableName
+		return "services." + defaultTableName
 	}
 
 	d.GetDB().Exec("CREATE SCHEMA IF NOT EXISTS application")
