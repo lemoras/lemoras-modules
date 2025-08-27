@@ -6,13 +6,12 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	u "github.com/lemoras/goutils/api"
 )
 
 func main() {
 	r := mux.NewRouter().StrictSlash(true)
 
-	r.Use(rateMiddleware)
+	// r.Use(rateMiddleware)
 
 	r.HandleFunc("/system/init/{key}", Initialize) // ----> To request all groceries
 	r.HandleFunc("/services/note", Note)
@@ -35,16 +34,16 @@ func main() {
 	//http.Handle("/", r)
 }
 
-func rateMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r.Method, r.URL.Path)
+// func rateMiddleware(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		log.Println(r.Method, r.URL.Path)
 
-		if isOk := u.RateTokenhandler(w, r); !isOk {
-			return
-		}
+// 		// if isOk := u.RateTokenhandler(w, r); !isOk {
+// 		// 	return
+// 		// }
 
-		w.Header().Set("Content-Type", "application/json")
+// 		w.Header().Set("Content-Type", "application/json")
 
-		next.ServeHTTP(w, r)
-	})
-}
+// 		next.ServeHTTP(w, r)
+// 	})
+// }
