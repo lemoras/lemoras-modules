@@ -17,16 +17,7 @@ type Request struct {
 	DetailText string    `json:"detailText"`
 	Category   int       `json:"category"`
 
-	Http CustomHttp `json:"http"`
-}
-
-type CustomHttp struct {
-	CustomHeader CustomHeader `json:"headers"`
-	Method       string       `json:"method"`
-}
-
-type CustomHeader struct {
-	Authorization string `json:"authorization"`
+	Http u.CustomHttp `json:"http"`
 }
 
 func Invoke(in Request) (*u.Response, error) {

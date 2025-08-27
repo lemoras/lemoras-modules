@@ -21,7 +21,7 @@ type Request struct {
 	ItemSize     float64   `json:"itemSize"`
 	ItemURL      string    `json:"itemURL"`
 
-	Http CustomHttp `json:"http"`
+	Http u.CustomHttp `json:"http"`
 }
 
 type RequestDto struct {
@@ -40,15 +40,6 @@ type RequestDto struct {
 	RoleId     int       `json:"roleId"`
 	AppId      int       `json:"appId"`
 	MerchantId uuid.UUID `json:"merchantId"`
-}
-
-type CustomHttp struct {
-	CustomHeader CustomHeader `json:"headers"`
-	Method       string       `json:"method"`
-}
-
-type CustomHeader struct {
-	Authorization string `json:"authorization"`
 }
 
 func Invoke(in Request) (*u.Response, error) {

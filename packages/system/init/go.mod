@@ -6,7 +6,7 @@ replace initialize => ./module
 go 1.20
 
 require (
-	github.com/lemoras/goutils/api v1.0.2
+	github.com/lemoras/goutils/api v1.0.3
 	initialize v0.0.0-00010101000000-000000000000
 )
 
