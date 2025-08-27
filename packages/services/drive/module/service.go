@@ -323,7 +323,7 @@ func (req *RequestDto) Create() map[string]interface{} {
 	bucketItem.ItemType = req.ItemType
 	bucketItem.ItemURL = req.ItemURL
 
-	d.GetDB().Table("application.notes").Create(bucketItem)
+	d.GetDB().Table("services.notes").Create(bucketItem)
 
 	if bucketItem.ID <= 0 {
 		return u.Message(false, "0x11132:Failed to create note, connection error")

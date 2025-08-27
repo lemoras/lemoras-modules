@@ -25,7 +25,7 @@ func GetNotes(userId uuid.UUID, appId int, merchantId uuid.UUID, roleId int) map
 	accs := &[]Note{}
 
 	//check for errors and duplicate emails
-	err := d.GetDB().Table("application.notes").Where("user_id = ? and app_id =? and merchant_id = ? and role_id = ?", userId, appId, merchantId, roleId).Scan(accs).Error
+	err := d.GetDB().Table("services.notes").Where("user_id = ? and app_id =? and merchant_id = ? and role_id = ?", userId, appId, merchantId, roleId).Scan(accs).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return u.Message(false, "0x11004:Connection error. Please retry")
 	}
@@ -46,7 +46,7 @@ func (note *Note) Create() map[string]interface{} {
 
 	note.NoteId = uuid.New()
 
-	d.GetDB().Table("application.notes").Create(note)
+	d.GetDB().Table("services.notes").Create(note)
 
 	if note.ID <= 0 {
 		return u.Message(false, "0x11132:Failed to create note, connection error")
@@ -69,7 +69,7 @@ func SetCategoryByNotId(noteId uuid.UUID, categoryId int, userId uuid.UUID, appI
 
 	note.Category = categoryId
 
-	err := d.GetDB().Table("application.notes").Where("note_id = ? and user_id = ? and app_id =? and merchant_id = ? and role_id = ?", noteId, userId, appId, merchantId, roleId).Save(note).Error
+	err := d.GetDB().Table("services.notes").Where("note_id = ? and user_id = ? and app_id =? and merchant_id = ? and role_id = ?", noteId, userId, appId, merchantId, roleId).Save(note).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return u.Message(false, "0x11004:Connection error. Please retry")
 	}
@@ -85,7 +85,7 @@ func Delete(noteId uuid.UUID, userId uuid.UUID, appId int, merchantId uuid.UUID,
 		return u.Message(false, "0x11134:Unkown note error. Please retry")
 	}
 
-	err := d.GetDB().Table("application.notes").Unscoped().Delete(&note).Error
+	err := d.GetDB().Table("services.notes").Unscoped().Delete(&note).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return u.Message(false, "0x11004:Connection error. Please retry")
 	}
@@ -98,7 +98,7 @@ func GetNote(noteId uuid.UUID, userId uuid.UUID, appId int, merchantId uuid.UUID
 	acc := &Note{}
 
 	//check for errors and duplicate emails
-	err := d.GetDB().Table("application.notes").Where("note_id = ? and user_id = ? and app_id =? and merchant_id = ? and role_id = ?", noteId, userId, appId, merchantId, roleId).First(acc).Error
+	err := d.GetDB().Table("services.notes").Where("note_id = ? and user_id = ? and app_id =? and merchant_id = ? and role_id = ?", noteId, userId, appId, merchantId, roleId).First(acc).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		// return u.Message(false, "0x11004:Connection error. Please retry"), acc
 		println(u.Message(false, "0x11004:Connection error. Please retry"))

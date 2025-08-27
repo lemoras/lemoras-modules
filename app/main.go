@@ -6,7 +6,6 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	u "github.com/lemoras/goutils/api"
 )
 
 func main() {
@@ -39,9 +38,9 @@ func rateMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.Method, r.URL.Path)
 
-		if isOk := u.RateTokenhandler(w, r); !isOk {
-			return
-		}
+		// if isOk := u.RateTokenhandler(w, r); !isOk {
+		// 	return
+		// }
 
 		w.Header().Set("Content-Type", "application/json")
 
