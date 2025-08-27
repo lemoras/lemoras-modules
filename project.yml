@@ -7,6 +7,7 @@ packages:
         SPACES_ENDPOINT: "${SPACES_ENDPOINT}"
         SPACES_NAME: "${SPACES_NAME}"
         VALID_API_URL: "${VALID_API_URL}"
+        TICKET_API_URL: "${TICKET_API_URL}"
     functions:
       - name: note
         runtime: go:1.20
