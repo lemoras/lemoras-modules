@@ -31,6 +31,7 @@ func Invoke(in Request) (*u.Response, error) {
 	req, _ := http.NewRequest("GET", os.Getenv("VALID_API_URL"), &bytes.Buffer{})
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", in.Http.CustomHeader.Authorization)
+	req.Header.Add("x_api_key", "XAPI-SecretKey")
 
 	res, err := client.Do(req)
 
