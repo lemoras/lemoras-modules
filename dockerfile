@@ -9,6 +9,7 @@ RUN apk add --no-cache git ca-certificates
 COPY go.work ./
 COPY ./app ./app
 COPY ./packages ./packages
+COPY .env /app/.env
 
 # Modülleri indir
 RUN go work sync
@@ -23,7 +24,7 @@ RUN go build -o lemoras-modules .
 FROM alpine:latest
 
 WORKDIR /app
-
+COPY .env /app/.env
 # Copy the binary from builder
 COPY --from=builder /app/app/lemoras-modules .
 
@@ -34,6 +35,7 @@ COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 ENV PORT=80
 # Environment default (docker-compose override eder)
 ENV DATABASE_URL=postgresql://postgres:mysecretpassword@lemoras-db:5432/zoe?sslmode=disable
+ENV database_url=postgresql://postgres:mysecretpassword@lemoras-db:5432/zoe?sslmode=disable
 
 
 EXPOSE 80
