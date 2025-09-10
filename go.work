@@ -1,0 +1,10 @@
+go 1.25.0
+
+use (
+	./app
+	./packages/system/init/module
+	./packages/services/note/module
+	./packages/services/drive/module
+)
+
+
