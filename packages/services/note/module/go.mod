@@ -6,8 +6,8 @@ go 1.20
 require (
 	github.com/google/uuid v1.6.0
 	github.com/jinzhu/gorm v1.9.16
-	github.com/lemoras/goutils/api v1.0.3
-	github.com/lemoras/goutils/db v1.0.1
+	github.com/lemoras/goutils/api v1.0.7
+	github.com/lemoras/goutils/db v1.0.2
 )
 
 require (
